@@ -25,6 +25,7 @@ import com.sohu.cache.redis.RedisCenter;
 import com.sohu.cache.stats.app.ImportAppCenter;
 import com.sohu.cache.util.ConstUtils;
 import com.sohu.cache.util.IdempotentConfirmer;
+import com.sohu.cache.util.JedisUtil;
 import com.sohu.cache.web.service.AppService;
 
 /**
@@ -82,6 +83,8 @@ public class ImportAppCenterImpl implements ImportAppCenter {
                 MachineInfo machineInfo = machineCenter.getMachineInfoByIp(ip);
                 if (machineInfo == null) {
                     return ImportAppResult.fail(appInstance + "中的ip不存在");
+                } else if (machineInfo.isOffline()) {
+                    return ImportAppResult.fail(appInstance + "中的ip已经被删除");
                 }
             } catch (Exception e) {
                 return ImportAppResult.fail(appInstance + "中的ip不存在");
@@ -142,9 +145,12 @@ public class ImportAppCenterImpl implements ImportAppCenter {
     public boolean importAppAndInstance(AppDesc appDesc, String appInstanceInfo) {
         boolean isSuccess = true;
         try {
-            // 1.保存应用信息
+            // 1.1 保存应用信息
             appService.save(appDesc);
             long appId = appDesc.getAppId();
+            // 1.2 更新appKey
+            appService.updateAppKey(appId);
+
             int type = appDesc.getType();
             // 2.保存应用和用户的关系
             appService.saveAppToUser(appId, appDesc.getUserId());
@@ -168,6 +174,7 @@ public class ImportAppCenterImpl implements ImportAppCenter {
                     }
                     //deploy quartz
                     redisCenter.deployRedisCollection(appId, host, port);
+                    redisCenter.deployRedisSlowLogCollection(appId, host, port);
                 }
             }
 
@@ -192,7 +199,9 @@ public class ImportAppCenterImpl implements ImportAppCenter {
             public boolean execute() {
                 Jedis jedis = null;
                 try {
-                    jedis = new Jedis(ip, port);
+                    // 预留
+                    String password = null;
+                    jedis = JedisUtil.getJedis(ip, port, password);
                     jedis.getClient().setConnectionTimeout(Protocol.DEFAULT_TIMEOUT * (timeOutFactor++));
                     jedis.getClient().setSoTimeout(Protocol.DEFAULT_TIMEOUT * (timeOutFactor++));
                     List<Map<String, String>> mapList = jedis.sentinelMasters();

@@ -6,14 +6,14 @@ import com.sohu.cache.protocol.MachineProtocol;
  * Created by yijunzhang on 14-7-27.
  */
 public enum RedisConfigEnum {
-    DAEMONIZE("daemonize ", "no", "是否守护进程"),
+    DAEMONIZE("daemonize", "no", "是否守护进程"),
     TCP_BACKLOG("tcp-backlog", "511", "TCP连接完成队列"),
     TIMEOUT("timeout", "0", "客户端闲置多少秒后关闭连接,默认为0,永不关闭"),
     TCP_KEEPALIVE("tcp-keepalive", "0", "检测客户端是否健康周期,默认关闭"),
     LOGLEVEL("loglevel", "notice", "默认普通的verbose"),
     DATABASES("databases", "16", "可用的数据库数，默认值为16个,默认数据库为0"),
     DIR("dir", MachineProtocol.DATA_DIR, "redis工作目录,默认:" + MachineProtocol.DATA_DIR),
-    //--------复制相关--------------
+    STOP_WRITES_ON_BGSAVE_ERROR("stop-writes-on-bgsave-error", "no", "bgsave出错了不停写"),
     REPL_TIMEOUT("repl-timeout", "60", "master批量数据传输时间或者ping回复时间间隔,默认:60秒"),
     REPL_PING_SLAVE_PERIOD("repl-ping-slave-period", "10", "指定slave定期ping master的周期,默认:10秒"),
     REPL_DISABLE_TCP_NODELAY("repl-disable-tcp-nodelay", "no", "是否禁用socket的NO_DELAY,默认关闭，影响主从延迟"),
@@ -33,14 +33,13 @@ public enum RedisConfigEnum {
     ZSET_MAX_ZIPLIST_ENTRIES("zset-max-ziplist-entries", "128", "zset数据结构优化参数"),
     ZSET_MAX_ZIPLIST_VALUE("zset-max-ziplist-value", "64", "zset数据结构优化参数"),
     ACTIVEREHASHING("activerehashing", "yes", "是否激活重置哈希,默认:yes"),
-    CLIENT_OUTPUT_BUFFER_LIMIT_NORMAL("client-output-buffer-limit", "normal 0 0 0", ""),
-    CLIENT_OUTPUT_BUFFER_LIMIT_SLAVE("client-output-buffer-limit", "slave 512mb 128mb 60", ""),
-    CLIENT_OUTPUT_BUFFER_LIMIT_PUBSUB("client-output-buffer-limit", "pubsub 32mb 8mb 60", ""),
+    CLIENT_OUTPUT_BUFFER_LIMIT_NORMAL("client-output-buffer-limit normal", "0 0 0", ""),
+    CLIENT_OUTPUT_BUFFER_LIMIT_SLAVE("client-output-buffer-limit slave", "512mb 128mb 60", ""),
+    CLIENT_OUTPUT_BUFFER_LIMIT_PUBSUB("client-output-buffer-limit pubsub", "32mb 8mb 60", ""),
     HZ("hz", "10", "执行后台task数量,默认:10"),
-    PORT("port", "", "端口"),
-    MAXMEMORY("maxmemory", "", "当前实例最大可用内存,默认4Gb"),
+    PORT("port", "%d", "端口"),
+    MAXMEMORY("maxmemory", "%dmb", "当前实例最大可用内存"),
     MAXMEMORY_POLICY("maxmemory-policy", "volatile-lru", "内存不够时,淘汰策略,默认:volatile-lru"),
-    //------------AOF相关------------
     APPENDONLY("appendonly", "yes", "开启append only持久化模式"),
     APPENDFSYNC("appendfsync", "everysec", "默认:aof每秒同步一次"),
     APPENDFILENAME("appendfilename", "appendonly-%d.aof", "aof文件名称,默认:appendonly-{port}.aof"),
@@ -48,7 +47,7 @@ public enum RedisConfigEnum {
     AOF_REWRITE_INCREMENTAL_FSYNC("aof-rewrite-incremental-fsync","yes","aof rewrite过程中,是否采取增量文件同步策略,默认:yes"),
     NO_APPENDFSYNC_ON_REWRITE("no-appendfsync-on-rewrite", "yes", "是否在后台aof文件rewrite期间调用fsync,默认调用,修改为yes,防止可能fsync阻塞,但可能丢失rewrite期间的数据"),
     AUTO_AOF_REWRITE_MIN_SIZE("auto-aof-rewrite-min-size", "64m", "触发rewrite的aof文件最小阀值,默认64m"),
-    AUTO_AOF_REWRITE_PERCENTAGE("auto-aof-rewrite-percentage", "100", "Redis重写aof文件的比例条件,默认从100开始,统一机器下不同实例按4%递减");
+    AUTO_AOF_REWRITE_PERCENTAGE("auto-aof-rewrite-percentage", "%d", "Redis重写aof文件的比例条件,默认从100开始,统一机器下不同实例按4%递减");
 
     private String key;
 

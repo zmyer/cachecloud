@@ -84,7 +84,49 @@
                                                class="form-control" />
                                     </div>
                                 </div>
-
+                                
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">
+                                        	机器类型:
+                                    </label>
+                                    <div class="col-md-5">
+                                        <select name="machineType" id="machineType${machine.info.id}" class="form-control select2_category">
+                                            <option value="0" <c:if test="${machine.info.type == 0}">selected="selected"</c:if>>
+                                                	Redis机器(默认)
+                                            </option>
+                                            <option value="2" <c:if test="${machine.info.type == 2}">selected="selected"</c:if>>
+                                                	Redis迁移工具机器
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">
+                                      	  额外说明:
+                                    </label>
+                                    <div class="col-md-5">
+                                        <input type="text" name="extraDesc" id="extraDesc${machine.info.id}"
+                                               value="${machine.info.extraDesc}" placeholder="额外说明(可以不填)"
+                                               class="form-control" />
+                                    </div>
+                                </div>
+                                
+                               <div class="form-group">
+                                    <label class="control-label col-md-3">
+                                        状态收集:
+                                    </label>
+                                    <div class="col-md-5">
+                                        <select name="collect" id="collect${machine.info.id}" class="form-control select2_category">
+                                            <option value="0" <c:if test="${machine.info.collect == 0}">selected="selected"</c:if>>
+                                                关闭
+                                            </option>
+                                            <option value="1" <c:if test="${machine.info.collect == 1 || empty machine.info.id}">selected="selected"</c:if>>
+                                                开启
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
 
 
 

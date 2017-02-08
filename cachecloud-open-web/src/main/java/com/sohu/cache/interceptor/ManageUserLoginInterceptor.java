@@ -10,8 +10,8 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.sohu.cache.constant.AppUserTypeEnum;
 import com.sohu.cache.entity.AppUser;
+import com.sohu.cache.web.service.UserLoginStatusService;
 import com.sohu.cache.web.service.UserService;
-import com.sohu.cache.web.util.UserLoginStatusUtil;
 
 /**
  * 管理员登录验证
@@ -24,17 +24,19 @@ public class ManageUserLoginInterceptor extends HandlerInterceptorAdapter {
 
     private UserService userService;
     
+    private UserLoginStatusService userLoginStatusService;
+    
     @Override
     public boolean preHandle(HttpServletRequest request,
             HttpServletResponse response, Object handler) throws Exception {
 
-        long userId = UserLoginStatusUtil.getUserIdFromLoginStatus(request);
+        long userId = userLoginStatusService.getUserIdFromLoginStatus(request);
         AppUser user = userService.get(userId);
 
         //必须是管理员
         if (user == null || user.getType() != AppUserTypeEnum.ADMIN_USER.value()) {
-            String path = request.getSession(true).getServletContext().getContextPath();
-            response.sendRedirect(path + "/manage/login");
+            String redirectUrl = LoginInterceptorUtil.getLoginRedirectUrl(request);
+            response.sendRedirect(redirectUrl);
             return false;
         }
         
@@ -59,6 +61,10 @@ public class ManageUserLoginInterceptor extends HandlerInterceptorAdapter {
 
     public void setUserService(UserService userService) {
         this.userService = userService;
+    }
+
+    public void setUserLoginStatusService(UserLoginStatusService userLoginStatusService) {
+        this.userLoginStatusService = userLoginStatusService;
     }
 
 }

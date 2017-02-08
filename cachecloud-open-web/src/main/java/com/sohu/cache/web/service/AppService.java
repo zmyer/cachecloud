@@ -122,7 +122,7 @@ public interface AppService {
     AppAudit saveAppScaleApply(AppDesc appDesc, AppUser appUser, String applyMemSize, String appScaleReason, AppAuditType appScale);
 
     /**
-     * 保存配置申请
+     * 保存应用配置申请
      * @param appDesc
      * @param appUser
      * @param instanceId 实例id
@@ -133,19 +133,24 @@ public interface AppService {
     AppAudit saveAppChangeConfig(AppDesc appDesc, AppUser appUser, Long instanceId, String appConfigKey, String appConfigValue,String appConfigReason, AppAuditType modifyConfig);
 
     /**
+     * 保存实例配置申请
+     * @param appDesc
+     * @param appUser
+     * @param instanceId
+     * @param instanceConfigKey
+     * @param instanceConfigValue
+     * @param instanceConfigReason
+     * @param instanceModifyConfig
+     * @return
+     */
+    AppAudit saveInstanceChangeConfig(AppDesc appDesc, AppUser appUser, Long instanceId, String instanceConfigKey, String instanceConfigValue, String instanceConfigReason, AppAuditType instanceModifyConfig);
+    
+    /**
      * 获取审批信息
      * @param appAuditId
      * @return
      */
     AppAudit getAppAuditById(Long appAuditId);
-
-    /**
-     * 更新应用的内存报警阀值
-     * @param appId
-     * @param memAlertValue
-     * @param userInfo
-     */
-    SuccessEnum updateMemAlertValue(Long appId, Integer memAlertValue, AppUser userInfo);
 
     /**
      * 驳回理由
@@ -187,4 +192,21 @@ public interface AppService {
      * 获取所有应用
      */
     List<AppDesc> getAllAppDesc();
+
+    /**
+     * 修改报警配置
+     * @param appId
+     * @param memAlertValue
+     * @param clientConnAlertValue
+     * @param appUser
+     * @return
+     */
+    SuccessEnum changeAppAlertConfig(long appId, int memAlertValue, int clientConnAlertValue, AppUser appUser);
+
+    /**
+     * 更新appKey
+     * @param appId
+     */
+    void updateAppKey(long appId);
+    
 }

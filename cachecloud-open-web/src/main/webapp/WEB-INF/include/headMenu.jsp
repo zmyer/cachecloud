@@ -19,9 +19,11 @@
 						<c:if test="${userInfo.type == 0}">
 							<li><a target="_blank" href="/manage/total/list.do"><i class="fa fa-user"></i>管理后台</a></li>
 							<li><a target="_blank" href="/import/app/init"><i class="fa fa-user"></i>导入应用</a></li>
+							<li><a target="_blank" href="/data/migrate/list"><i class="fa fa-user"></i>迁移数据工具</a></li>
 						</c:if>
 						<li><a href="/admin/app/list.do"><i class="fa fa-user"></i>应用列表</a></li>
 						<li><a href="/admin/app/init.do"><i class="fa fa-user"></i>应用申请</a></li>
+						<li><a href="javascript:alert('CacheCloud <%=ConstUtils.CACHECLOUD_VERSION%>版本')" ><i class="fa fa-user"></i>关于</a></li>
 						<li><a href="/manage/logout.do"><i class="fa fa-user"></i>注销</a></li>
 					</ul>
                 </li>

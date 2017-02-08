@@ -104,6 +104,9 @@
 												<c:when test="${item.type == 3}">
 													注册用户申请
 												</c:when>
+												<c:when test="${item.type == 4}">
+													实例配置修改
+												</c:when>
 											</c:choose>	
 										</td>
 										<td>${item.info}</td>
@@ -122,7 +125,6 @@
 													<a onclick="if(window.confirm('确认要通过该申请请求吗?')){return true;}else{return false;}" href="${auditUrl}">[通过]</a>
 												</c:when>
 											</c:choose>
-											&nbsp;
 											<c:choose>
 												<c:when test="${item.status == 0}">
 													<a href="javascript:void(0);" data-target="#appRefuseModal${item.id}" data-toggle="modal">[驳回]</a>
@@ -138,6 +140,9 @@
 												</c:when>
 												<c:when test="${item.type == 2}">
 													<c:set var="auditDealUrl" value="/manage/app/initAppConfigChange.do?appAuditId=${item.id}"/>
+												</c:when>
+												<c:when test="${item.type == 4}">
+													<c:set var="auditDealUrl" value="/manage/instance/initInstanceConfigChange.do?appAuditId=${item.id}"/>
 												</c:when>
 											</c:choose>
 											<c:choose>
